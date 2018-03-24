@@ -1,17 +1,9 @@
 # Load packages -----------------------------------------------------
 library(shiny)
+library(openintro)
 source('./helper/chiTail.R')
 source('./helper/FTail.R')
 source('./helper/normTail.R')
-
-# set mirror
-options(repos=structure(c(CRAN="http://cran.rstudio.com")))
-
-if (!("shiny" %in% names(installed.packages()[,"Package"]))) {install.packages("shiny")}
-suppressMessages(library(shiny, quietly = TRUE))
-
-if (!("openintro" %in% names(installed.packages()[,"Package"]))) {install.packages("openintro")}
-suppressMessages(library(openintro, quietly = TRUE))
 
 defaults = list("tail" = "lower",
                 "lower_bound" = "open",
@@ -19,12 +11,9 @@ defaults = list("tail" = "lower",
 
 # Define UI ---------------------------------------------------------
 ui <- pageWithSidebar(
-  
   headerPanel("Distribution Calculator"),
-  
   sidebarPanel(
     #radio button or dropdown?
-    
     selectInput(inputId = "dist",
                 label = "Distribution:",
                 choices = c("Normal"      = "rnorm",
@@ -33,8 +22,6 @@ ui <- pageWithSidebar(
                             "F"           = "rf",
                             "Chi-Squared" = "rchisq"),
                 selected = "rnorm"),
-    
-    
     br(),
     
     uiOutput("mean"),
@@ -65,8 +52,6 @@ ui <- pageWithSidebar(
     helpText(a(href="https://github.com/ShinyEd/ShinyEd/tree/master/dist_calc", target="_blank", "View code")),
     helpText(a(href="http://stat.duke.edu/~mc301/shiny/applets.html", target="_blank", "Check out other apps")),
     helpText(a(href="https://www.coursera.org/course/statistics", target="_blank", "Want to learn more for free?"))),
-  
-  
   
   mainPanel(
     plotOutput("plot"),
@@ -300,7 +285,7 @@ server <- function(input, output){
       #print("df1")
       if (input$dist %in% c("rt","rchisq","rf"))
       {
-        sliderInput(ifelse(input$dist %in% c("rt","rchisq"), "df","df1"),
+        sliderInput(ifelse(input$dist %in% c("rt", "rchisq"), "df", "df1"),
                     "Degrees of freedom",
                     value = 10,
                     min = 1,
@@ -370,7 +355,7 @@ server <- function(input, output){
       {
         find_normal_step = function(sd)
         {
-          10^round(log(7*sd/100,10))
+          10^round(log(7 * sd / 100, 10))
         }
         
         if (is.null(input$mu) | is.null(input$sd)){
@@ -398,16 +383,16 @@ server <- function(input, output){
       }
       else if (input$dist == "rf")
       {
-        value = round(qf(.95,as.numeric(input$df1),as.numeric(input$df2)),digits=2)
+        value = round(qf(.95, as.numeric(input$df1), as.numeric(input$df2)), digits = 2)
         min   = 0
-        max   = round(qf(.995,as.numeric(input$df1),as.numeric(input$df2))*1.05,digits=2)
+        max   = round(qf(.995, as.numeric(input$df1), as.numeric(input$df2)) * 1.05, digits = 2)
         step  = 0.01
       }
       else if (input$dist == "rchisq")
       {
-        value = round(qchisq(.95,as.numeric(input$df)),digits=2)
+        value = round(qchisq(.95, as.numeric(input$df)), digits = 2)
         min   = 0
-        max   = round(qchisq(.995,as.numeric(input$df)),digits=2)
+        max   = round(qchisq(.995, as.numeric(input$df)), digits = 2)
         step  = 0.01
       }
       else if (input$dist == "rbinom")
@@ -417,7 +402,7 @@ server <- function(input, output){
           return()
         }
         
-        value = round(input$n/4)
+        value = round(input$n / 4)
         min = 0
         max = input$n
         step = 1
@@ -425,9 +410,9 @@ server <- function(input, output){
       
       sliderInput("a", "a",
                   value = value,
-                  min   = min,
-                  max   = max,
-                  step  = step)
+                  min = min,
+                  max = max,
+                  step = step)
     })
   
   output$b = renderUI(
@@ -440,7 +425,7 @@ server <- function(input, output){
         return()
       }
       
-      if (input$tail %in% c("middle","both"))
+      if (input$tail %in% c("middle", "both"))
       {
         value = 1
         min = 0
@@ -451,7 +436,7 @@ server <- function(input, output){
         {
           find_normal_step = function(sd)
           {
-            10^round(log(7*sd/100,10))
+            10^round(log(7 * sd / 100, 10))
           }
           
           if (is.null(input$mu) | is.null(input$sd)){
@@ -472,9 +457,9 @@ server <- function(input, output){
         else if (input$dist == "rt")
         {
           value = 1.96 
-          min   = -6
-          max   = 6
-          step  = 0.01
+          min = -6
+          max = 6
+          step = 0.01
         }
         else if (input$dist == "rbinom")
         {
@@ -483,7 +468,7 @@ server <- function(input, output){
             return()
           }
           
-          value = round(input$n*3/4)
+          value = round(input$n * 3 / 4)
           min = 0
           max = input$n
           step = 1
@@ -491,9 +476,9 @@ server <- function(input, output){
         
         sliderInput("b", "b",
                     value = value,
-                    min   = min,
-                    max   = max,
-                    step  = step)
+                    min = min,
+                    max = max,
+                    step = step)
       }
     })  
   
@@ -541,8 +526,8 @@ server <- function(input, output){
       
       if (error)
       {
-        plot(0,0,type='n',axes=FALSE,xlab="",ylab="",mar=c(1,1,1,1))
-        text(0,0,"Error: Lower bound greater than upper bound.",col="red",cex=2)
+        plot(0, 0, type = 'n', axes = FALSE, xlab ="", ylab = "", mar = c(1,1,1,1))
+        text(0, 0, "Error: Lower bound greater than upper bound.", col="red", cex=2)
       }
       else
       {
@@ -564,8 +549,8 @@ server <- function(input, output){
               return()
             }
             
-            normTail(m=input$mu, s=input$sd, L=L, U=U, M=M, axes=3, cex.axis=1.5)
-            title(main="Normal Distribution")
+            normTail(m = input$mu, s = input$sd, L = L, U = U, M = M, axes = 3, cex.axis = 1.5)
+            title(main = "Normal Distribution")
           }
           else if (input$dist == "rt")
           {
@@ -575,8 +560,8 @@ server <- function(input, output){
               return()
             }
             
-            normTail(m=0, s=1, df=input$df, L=L, U=U, M=M, axes=3, cex.axis=1.5)
-            title(main="t Distribution")
+            normTail(m = 0, s = 1, df = input$df, L = L, U = U, M = M, axes = 3, cex.axis = 1.5)
+            title(main = "t Distribution")
           }
         }
         else if (input$dist == "rchisq")
@@ -594,8 +579,8 @@ server <- function(input, output){
             U = NULL
           }
           
-          chiTail(U=U, df=input$df, xlim = c(0,round(qchisq(.995,input$df),digits=2)+1))
-          title(main="Chi^2 Distribution")
+          chiTail(U = U, df = input$df, xlim = c(0, round(qchisq(.995, input$df), digits = 2) + 1))
+          title(main = "Chi^2 Distribution")
         }
         else if (input$dist == "rf")
         { 
@@ -609,8 +594,8 @@ server <- function(input, output){
             U = NULL
           }
           
-          FTail(U=U,df_n=input$df1, df_d=input$df2)
-          title(main="F Distribution")
+          FTail(U = U, df_n = input$df1, df_d = input$df2)
+          title(main = "F Distribution")
         }
         else if (input$dist == "rbinom")
         {
@@ -628,15 +613,13 @@ server <- function(input, output){
             return()
           }
           
-          d = dbinom(0:input$n,input$n,input$p)
+          d = dbinom(0:input$n, input$n, input$p)
           
-          plot(0,0,type='n',xlim=c(-0.5,input$n+0.5),ylim=c(0,max(d)),
-               xlab="",ylab="", axes=FALSE)
-          axis(1, cex.axis=1.5)
-          axis(2, cex.axis=1.5)
-          title(main=paste("Binomial Distribution"))
-          
-          
+          plot(0, 0, type = 'n', xlim = c(-0.5, input$n + 0.5), ylim = c(0, max(d)),
+               xlab = "", ylab = "", axes = FALSE)
+          axis(1, cex.axis = 1.5)
+          axis(2, cex.axis = 1.5)
+          title(main = paste("Binomial Distribution"))
           
           for (k in 1:length(d)) 
           {
@@ -671,9 +654,9 @@ server <- function(input, output){
               if (input$lower_bound == "closed" & input$upper_bound == "closed" & k-1 >= L & k-1 <= U) col = "#569BBD"
             }
             
-            p = matrix(c(-1.5+k,0, -0.5+k,0, -0.5+k,d[k], -1.5+k,d[k], -1.5+k,0),ncol=2,byrow=TRUE)
+            p = matrix(c(-1.5 + k, 0, -0.5 + k, 0, -0.5 + k, d[k], -1.5 + k, d[k], -1.5 + k, 0),ncol = 2,byrow = TRUE)
             
-            polygon(p, col=col)
+            polygon(p, col = col)
           }
         }
       }
@@ -723,7 +706,7 @@ server <- function(input, output){
           return()
         }
         
-        f = function(x) pnorm(x,input$mu,input$sd)
+        f = function(x) pnorm(x, input$mu, input$sd)
       }  
       else if (input$dist == "rt")
       {
@@ -733,7 +716,7 @@ server <- function(input, output){
           return()
         }
         
-        f = function(x) pt(x,input$df)
+        f = function(x) pt(x, input$df)
       }
       else if (input$dist == "rchisq"){
         if (is.null(input$df))
@@ -742,7 +725,7 @@ server <- function(input, output){
           return()
         }
         
-        f = function(x) pchisq(x,input$df)
+        f = function(x) pchisq(x, input$df)
       }
       else if (input$dist == "rf"){
         if (is.null(input$df1) | is.null(input$df2))
@@ -751,7 +734,7 @@ server <- function(input, output){
           return()
         }
         
-        f = function(x) pf(x,input$df1,input$df2)
+        f = function(x) pf(x, input$df1, input$df2)
       }    
       else if (input$dist == "rbinom")
       {
@@ -763,11 +746,11 @@ server <- function(input, output){
         
         if (input$tail == "equal")
         {
-          f = function(x) dbinom(x,input$n,input$p)
+          f = function(x) dbinom(x, input$n, input$p)
         }
         else
         {
-          f = function(x) pbinom(x,input$n,input$p)
+          f = function(x) pbinom(x, input$n, input$p)
           
           if (input$tail %in% c("lower","both") & input$lower_bound == "open") L = L-1
           if (input$tail %in% c("upper")        & input$lower_bound == "closed") L = L-1
@@ -791,20 +774,20 @@ server <- function(input, output){
       if (input$tail == "lower")
         val = f(L)
       else if (input$tail == "upper")
-        val = 1-f(L)
+        val = 1 - f(L)
       else if (input$tail == "equal")
         val = f(L)
       else if (input$tail == "both")
-        val = f(L) + (1-f(U))
+        val = f(L) + (1 - f(U))
       else if (input$tail == "middle")
         val = f(U) - f(L)
       
-      text = paste(get_model_text(),"=",signif(val,3))
+      text = paste(get_model_text(), "=", signif(val, 3))
       
       
-      text = sub("a",input$a,text)
-      if (input$tail %in% c("both","middle")) 
-        text = sub("b",input$b,text)
+      text = sub("a", input$a,text)
+      if (input$tail %in% c("both", "middle")) 
+        text = sub("b", input$b,text)
       
       text
     })
