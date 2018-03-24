@@ -369,17 +369,17 @@ server <- function(input, output){
         if (is.null(sd)) sd = 1
         
         value = mu - 1.96 * sd
-        min   = mu - 4 * sd
-        max   = mu + 4 * sd
-        step  = find_normal_step(sd)
+        min = mu - 4 * sd
+        max = mu + 4 * sd
+        step = find_normal_step(sd)
         if (mu == 0 & sd == 1) {step = .01}
       }
       else if (input$dist == "rt")
       {
         value = -1.96 
-        min   = -6
-        max   = 6
-        step  = 0.01
+        min = -6
+        max = 6
+        step `= 0.01
       }
       else if (input$dist == "rf")
       {
@@ -510,7 +510,7 @@ server <- function(input, output){
       {
         U = input$a 
       }
-      else if (input$tail %in% c("both","middle"))
+      else if (input$tail %in% c("both", "middle"))
       {
         if (is.null(input$b)){
           shiny:::flushReact()
@@ -527,7 +527,7 @@ server <- function(input, output){
       if (error)
       {
         plot(0, 0, type = 'n', axes = FALSE, xlab ="", ylab = "", mar = c(1,1,1,1))
-        text(0, 0, "Error: Lower bound greater than upper bound.", col="red", cex=2)
+        text(0, 0, "Error: Lower bound greater than upper bound.", col = "red", cex = 2)
       }
       else
       {
