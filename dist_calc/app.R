@@ -52,12 +52,13 @@ ui <- pageWithSidebar(
     helpText(a(href="https://github.com/ShinyEd/ShinyEd/tree/master/dist_calc", target="_blank", "View code")),
     helpText(a(href="http://stat.duke.edu/~mc301/shiny/applets.html", target="_blank", "Check out other apps")),
     helpText(a(href="https://www.coursera.org/course/statistics", target="_blank", "Want to learn more for free?"))),
-  
+    
   mainPanel(
     plotOutput("plot"),
     div(textOutput("area"), align = "center", style="font-size:150%;")
-  )
+    )
 )
+
 
 # Define server function --------------------------------------------
 server <- function(input, output){ 
@@ -379,7 +380,7 @@ server <- function(input, output){
         value = -1.96 
         min = -6
         max = 6
-        step `= 0.01
+        step = 0.01
       }
       else if (input$dist == "rf")
       {
