@@ -255,7 +255,7 @@ server <- function(input, output){
       #print("mean")
       if (input$dist == "rnorm")
       {
-        sliderInput("mu",
+        numericInput("mu",
                     "Mean",
                     value = 0,
                     min = -50,
@@ -268,7 +268,7 @@ server <- function(input, output){
       #print("sd")
       if (input$dist == "rnorm")
       {
-        sliderInput("sd",
+        numericInput("sd",
                     "Standard deviation",
                     value = 1,
                     min = 0.1,
@@ -317,7 +317,7 @@ server <- function(input, output){
       #print("n")
       if (input$dist == "rbinom")
       {
-        sliderInput("n",
+        numericInput("n",
                     "n",
                     value = 10,
                     min = 1,
@@ -331,7 +331,7 @@ server <- function(input, output){
       #print("p")
       if (input$dist == "rbinom")
       {
-        sliderInput("p",
+        numericInput("p",
                     "p",
                     value = 0.5,
                     min = 0,
@@ -409,7 +409,7 @@ server <- function(input, output){
         step = 1
       }
       
-      sliderInput("a", "a",
+      numericInput("a", "a",
                   value = value,
                   min = min,
                   max = max,
